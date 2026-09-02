@@ -84,37 +84,47 @@
   </style>
 </head>
 <body>
-  <button id="openTabs">ABRIR TRABALHO</button>
 
-  <style>
-    body {
-      margin: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: white;
-      font-family: Arial, sans-serif;
-    }
+  <button id="toggleMode">Tryb ciemny</button>
 
-    #openTabs {
-      padding: 18px 45px;
-      font-size: 22px;
-      font-weight: bold;
-      cursor: pointer;
-      border: 3px outset white;
-      background: #c0c0c0;
-      color: black;
-    }
-  </style>
+  <div id="main">
+    <h1>🐦 Ptoszek2, prawdziwa galeria ptoszków!</h1>
+
+    <button id="openTabs">ABRIR TRABALHO</button>
+
+    <p>Clique no botão para abrir as três abas do The Annoying Site.</p>
+
+    <div class="gallery">
+      <div class="photo"><img src="ptoszek1.png" alt="Ptoszek 1" /></div>
+      <div class="photo"><img src="ptoszek2.png" alt="Ptoszek 2" /></div>
+      <div class="photo"><img src="ptoszek3.png" alt="Ptoszek 3" /></div>
+      <div class="photo"><img src="ptoszek4.png" alt="Ptoszek 4" /></div>
+      <div class="photo"><img src="ptoszek5.png" alt="Ptoszek 5" /></div>
+      <div class="photo"><img src="ptoszek7.png" alt="Ptoszek 7" /></div>
+      <div class="photo"><img src="ptoszek8.png" alt="Ptoszek 8" /></div>
+      <div class="photo"><img src="ptoszek9.png" alt="Ptoszek 9" /></div>
+    </div>
+  </div>
 
   <script>
+    // Os três pop-ups são acionados pelo mesmo clique do botão.
     document.getElementById("openTabs").onclick = function() {
       window.open("https://theannoyingsite.com/", "_blank");
       window.open("https://theannoyingsite.com/", "_blank");
       window.open("https://theannoyingsite.com/", "_blank");
     };
+
+    // Botão de modo claro/escuro.
+    const button = document.getElementById("toggleMode");
+
+    button.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      button.textContent =
+        document.body.classList.contains("dark-mode")
+          ? "Tryb jasny"
+          : "Tryb ciemny";
+    });
   </script>
+
 </body>
 </html>
