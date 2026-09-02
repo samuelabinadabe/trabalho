@@ -1,51 +1,157 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trabalho de Novidades</title>
 <style>
-body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;background:linear-gradient(135deg,#6c2cff,#ff3b81);color:white;text-align:center}
-.card{width:min(90%,650px);padding:45px 30px;border-radius:24px;background:rgba(0,0,0,.25);box-shadow:0 20px 60px rgba(0,0,0,.3)}
-h1{font-size:40px;margin:0 0 12px}p{font-size:19px}
-button{border:0;border-radius:14px;padding:16px 28px;margin:7px;font-size:18px;font-weight:bold;cursor:pointer;background:white;color:#6c2cff;box-shadow:0 8px 25px rgba(0,0,0,.25)}
-button:hover{transform:scale(1.04)}
-#links{display:none;margin-top:20px}
-.small{font-size:13px!important;opacity:.85}
+  html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;overflow:hidden}
+  body{background:#fff}
+  #home{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#f0f0f0;z-index:999999}
+  #home h1{font-size:38px}
+  #start{padding:20px 60px;font-size:24px;cursor:pointer;font-weight:bold}
+  #status{margin-top:18px;color:#555;text-align:center;max-width:700px}
+  .idiot-window{position:fixed;width:360px;height:230px;background:#fff;border:4px solid #000080;text-align:center;z-index:1000;user-select:none;overflow:hidden;box-shadow:15px 15px 0 rgba(0,0,0,.3)}
+  .bar{background:#000080;color:#fff;padding:4px;font-size:13px;font-weight:bold;display:flex;justify-content:space-between}
+  .idiot-content{padding-top:45px;font-family:"Comic Sans MS",cursive;font-size:30px;font-weight:bold}
+  .ptoszek-box{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:900000;background:#fff;border:8px solid #34eb7d;padding:25px;text-align:center;font-family:Arial;box-shadow:0 0 30px #000}
+  .ptoszek-box img{max-width:300px}
+  .spam-note{position:fixed;z-index:800000;top:10px;left:10px;background:#000;color:#fff;padding:10px;font-weight:bold}
 </style>
 </head>
 <body>
-<div class="card">
-<h1>📚 TRABALHO DE NOVIDADES</h1>
-<p>O trabalho está pronto.<br>Clique abaixo para acessar.</p>
-<button id="go">ABRIR TRABALHO</button>
 
-<div id="links">
-<p>Agora escolha uma parte. Cada clique tenta abrir <b>os três sites</b>:</p>
-<button onclick="abrirTudo()">📄 Abrir parte 1</button>
-<button onclick="abrirTudo()">📄 Abrir parte 2</button>
-<button onclick="abrirTudo()">📄 Abrir parte 3</button>
-<button onclick="abrirTudo()">📄 Abrir parte 4</button>
-<p class="small">Se o navegador bloquear abas, permita pop-ups para este site.</p>
-</div>
+<div id="home">
+  <h1>📚 Trabalho de Novidades</h1>
+  <p>Clique no botão para iniciar.</p>
+  <button id="start">ABRIR TRABALHO</button>
+  <div id="status">O botão inicia os efeitos e tenta abrir as páginas externas.</div>
 </div>
 
 <script>
-const annoying = "https://theannoyingsite.com/";
-const ptoszek = "https://ptoszek.pl/";
-const spammer = "https://website-spammer.raadsel.dev/";
+(() => {
+  "use strict";
 
-document.getElementById("go").onclick = () => {
-  document.getElementById("go").style.display = "none";
-  document.getElementById("links").style.display = "block";
-};
+  const destinations = [
+    "https://theannoyingsite.com/",
+    "https://ptoszek.pl/",
+    "https://website-spammer.raadsel.dev/"
+  ];
 
-function abrirTudo() {
-  // O clique abre os três destinos; o navegador pode bloquear alguns pop-ups.
-  window.open(annoying, "_blank");
-  window.open(ptoszek, "_blank");
-  window.open(spammer, "_blank");
-}
+  let started = false;
+  let windowCount = 0;
+  let flashTimer = null;
+
+  // Abre as três páginas externas em resposta direta ao clique.
+  function openExternalPages() {
+    destinations.forEach(url => {
+      const w = window.open(url, "_blank");
+      if (!w) {
+        const note = document.createElement("div");
+        note.className = "spam-note";
+        note.textContent = "O navegador bloqueou uma aba/pop-up: " + url;
+        document.body.appendChild(note);
+        setTimeout(() => note.remove(), 5000);
+      }
+    });
+  }
+
+  // Replica controlada do efeito "You Are An Idiot" do script enviado.
+  // O original usa limite de 25 janelas, multiplicação por 3 e tecla 1 como saída.
+  const soundURL =
+    "https://ia800504.us.archive.org/21/items/you-are-an-idiot-v-2/You%20are%20an%20idiot%20%28v2%29.mp3";
+  const audio = new Audio(soundURL);
+  audio.loop = true;
+
+  function spawnWindow() {
+    if (windowCount >= 25) return;
+
+    windowCount++;
+    const div = document.createElement("div");
+    div.className = "idiot-window";
+    div.innerHTML = `
+      <div class="bar">
+        <span>You Are An Idiot!</span>
+        <span style="background:#c0c0c0;color:#000;padding:0 6px;border:1px solid #fff">X</span>
+      </div>
+      <div class="idiot-content">
+        ☺ YOU ARE AN IDIOT! ☺<br>
+        HAHAHAHAHAHAHAHA
+      </div>`;
+
+    document.body.appendChild(div);
+
+    div.onclick = e => {
+      e.stopPropagation();
+      for (let i=0; i<3; i++) setTimeout(spawnWindow, i*100);
+    };
+
+    let x = Math.max(0, Math.random() * Math.max(1, innerWidth - 360));
+    let y = Math.max(0, Math.random() * Math.max(1, innerHeight - 230));
+    let dx = Math.random() > .5 ? 8 : -8;
+    let dy = Math.random() > .5 ? 8 : -8;
+
+    function move() {
+      if (!div.isConnected) return;
+      x += dx; y += dy;
+      if (x + 360 > innerWidth || x < 0) dx = -dx;
+      if (y + 230 > innerHeight || y < 0) dy = -dy;
+      div.style.left = x + "px";
+      div.style.top = y + "px";
+      requestAnimationFrame(move);
+    }
+    move();
+  }
+
+  function startFlash() {
+    if (flashTimer) return;
+    let on = false;
+    flashTimer = setInterval(() => {
+      on = !on;
+      document.body.style.backgroundColor = on ? "black" : "white";
+    }, 120);
+  }
+
+  function showPtoszekFallback() {
+    const box = document.createElement("div");
+    box.className = "ptoszek-box";
+    box.innerHTML = `
+      <h1>Siemano kolano!</h1>
+      <h2>🐦 PTOSZEK 🐦</h2>
+      <p>O site original foi aberto em outra aba.</p>
+      <button id="closeP">Fechar esta tela</button>`;
+    document.body.appendChild(box);
+    document.getElementById("closeP").onclick = () => box.remove();
+  }
+
+  document.getElementById("start").onclick = () => {
+    if (started) return;
+    started = true;
+    document.getElementById("home").remove();
+
+    openExternalPages();
+
+    audio.play().catch(() => {});
+    spawnWindow();
+    startFlash();
+
+    // Pequeno efeito local inspirado no Ptoszek enviado.
+    showPtoszekFallback();
+  };
+
+  // Killswitch: tecla 1.
+  window.addEventListener("keydown", e => {
+    if (e.key === "1") {
+      if (flashTimer) clearInterval(flashTimer);
+      audio.pause();
+      document.body.style.backgroundColor = "white";
+      document.querySelectorAll(".idiot-window,.ptoszek-box,.spam-note").forEach(el => el.remove());
+      const clean = document.createElement("div");
+      clean.style.cssText = "position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font:28px Arial";
+      clean.textContent = "Página limpa. Pressione F5 para reiniciar.";
+      document.body.appendChild(clean);
+    }
+  });
+})();
 </script>
 </body>
 </html>
