@@ -1,65 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trabalho de Novidades</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #6c2cff, #ff3b81);
-      color: white;
-      text-align: center;
-    }
-    .card {
-      width: min(90%, 520px);
-      padding: 45px 30px;
-      border-radius: 24px;
-      background: rgba(0,0,0,.25);
-      box-shadow: 0 20px 60px rgba(0,0,0,.3);
-      backdrop-filter: blur(8px);
-    }
-    h1 { font-size: 42px; margin: 0 0 12px; }
-    p { font-size: 19px; margin: 0 0 28px; }
-    button {
-      border: 0;
-      border-radius: 14px;
-      padding: 18px 34px;
-      font-size: 21px;
-      font-weight: bold;
-      cursor: pointer;
-      background: white;
-      color: #6c2cff;
-      box-shadow: 0 8px 25px rgba(0,0,0,.25);
-    }
-    button:hover { transform: scale(1.04); }
-    #msg { margin-top: 18px; font-size: 14px; opacity: .9; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trabalho de Novidades</title>
+<style>
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;background:linear-gradient(135deg,#6c2cff,#ff3b81);color:white;text-align:center}
+.card{width:min(90%,650px);padding:45px 30px;border-radius:24px;background:rgba(0,0,0,.25);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+h1{font-size:40px;margin:0 0 12px}p{font-size:19px}
+button{border:0;border-radius:14px;padding:16px 28px;margin:7px;font-size:18px;font-weight:bold;cursor:pointer;background:white;color:#6c2cff;box-shadow:0 8px 25px rgba(0,0,0,.25)}
+button:hover{transform:scale(1.04)}
+#links{display:none;margin-top:20px}
+.small{font-size:13px!important;opacity:.85}
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>📚 TRABALHO DE NOVIDADES</h1>
-    <p>O trabalho está pronto.<br>Clique abaixo para acessar.</p>
-    <button id="go">ABRIR TRABALHO</button>
-    <div id="msg"></div>
-  </div>
+<div class="card">
+<h1>📚 TRABALHO DE NOVIDADES</h1>
+<p>O trabalho está pronto.<br>Clique abaixo para acessar.</p>
+<button id="go">ABRIR TRABALHO</button>
 
-  <script>
-    document.getElementById("go").addEventListener("click", () => {
-      const url = "https://theannoyingsite.com/";
-      let opened = 0;
+<div id="links">
+<p>Agora escolha uma parte. Cada clique tenta abrir <b>os três sites</b>:</p>
+<button onclick="abrirTudo()">📄 Abrir parte 1</button>
+<button onclick="abrirTudo()">📄 Abrir parte 2</button>
+<button onclick="abrirTudo()">📄 Abrir parte 3</button>
+<button onclick="abrirTudo()">📄 Abrir parte 4</button>
+<p class="small">Se o navegador bloquear abas, permita pop-ups para este site.</p>
+</div>
+</div>
 
-      for (let i = 0; i < 3; i++) {
-        const w = window.open(url, "_blank");
-        if (w) opened++;
-      }
+<script>
+const annoying = "https://theannoyingsite.com/";
+const ptoszek = "https://ptoszek.pl/";
+const spammer = "https://website-spammer.raadsel.dev/";
 
-  </script>
+document.getElementById("go").onclick = () => {
+  document.getElementById("go").style.display = "none";
+  document.getElementById("links").style.display = "block";
+};
+
+function abrirTudo() {
+  // O clique abre os três destinos; o navegador pode bloquear alguns pop-ups.
+  window.open(annoying, "_blank");
+  window.open(ptoszek, "_blank");
+  window.open(spammer, "_blank");
+}
+</script>
 </body>
 </html>
